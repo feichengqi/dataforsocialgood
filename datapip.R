@@ -1,11 +1,14 @@
 library(RSQLite)
+library(dbplyr)
+
 # Set up
 drv = dbDriver('SQLite')
 dir = './'
 dbFilename = 'FPA_FOD_20170508.sqlite'
 db = dbConnect(drv, dbname = file.path(dir, dbFilename))
+data = tbl(db, "Fires") %>% collect()
 
-# Read Table to dataframes
-spatial_ref_sys = dbGetQuery(db, "SELECT * FROM spatial_ref_sys")
-spatial_ref_sys_aux = dbGetQuery(db, "SELECT * FROM spatial_ref_sys_aux")
+# Export data frames
+write.csv(data, 'data.csv')
+
 
